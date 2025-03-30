@@ -1,9 +1,12 @@
 #!/bin/bash
 
 previewHash=$(jq -r '.previewHash' configs.json)
+previewHash20=$(jq -r '.previewHash20' configs.json)
 quickstartHash=$(jq -r '.quickstartHash' configs.json)
 
 previewVersion=$(echo "$previewHash" | cut -d'@' -f1)
+previewVersion20=$(echo "$previewHash20" | cut -d'@' -f1)
+
 echo $previewVersion
 
 set -e
@@ -71,18 +74,38 @@ docker run -dti \
   --network soroban-network \
   esteblock/soroban-preview:${previewHash}
 
+docker run -dti \
+  --volume ${currentDir}:/workspace \
+  --name soroban-preview-${previewVersion20} \
+  -p 8005:8000 \
+  --ipc=host \
+  --network soroban-network \
+  esteblock/soroban-preview:${previewHash20}
+
 echo "  "
 echo "  "
 
 echo "5. Run a stellar quickstart container"
-# Run the stellar quickstart image
+
+
 docker run --rm -ti \
-  --name stellar \
-  --network soroban-network \
-  -p 8000:8000 \
-  stellar/quickstart:${quickstartHash} \
-  $ARGS \
-  --enable-soroban-rpc \
-  --protocol-version 21 \
-  --enable-soroban-diagnostic-events \
-  "$@" # Pass through args from the CLI
+    --name stellar \
+    --network soroban-network \
+    -p "8000:8000" \
+    stellar/quickstart:${quickstartHash} \
+    --local \
+    #--limits unlimited \
+    --enable-soroban-rpc \
+    --protocol-version 21 \
+    --enable-soroban-diagnostic-events
+
+
+#docker run --rm -ti \
+#  --name stellar \
+#  --network soroban-network \
+#  -p 8000:8000 \
+#  stellar/quickstart:${quickstartHash} \
+#  --local \
+#  --enable-soroban-rpc \
+#  --protocol-version 21 \
+#  --enable-soroban-diagnostic-events \

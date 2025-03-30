@@ -1,5 +1,6 @@
 {
     "previewHash": "22.0.1@sha256:c3074481338f167d4cedac550b7dfa73b9e01c0dcd5740026b013df7c5568b40",
+    "previewHash20": "20.2.0@sha256:7315e09645c1a4f5460790e90a72c99752d879e286581e1f46191229c735d6e7",
     "quickstartHash": "latest@sha256:b7f5a1b2c8ec06cb30a1b79b377ad2bc762cf8cb69ce1fcf7b91185b2acd8a15",
     "networkConfig": [
         {
